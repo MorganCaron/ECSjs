@@ -13,10 +13,19 @@ class Entity {
         this[lowercaseFirstLetter(component.name)] = new component;
         return this;
     }
+    addComponents(components) {
+        for (var key in components)
+            this.addComponent(components[key]);
+        return this;
+    }
     removeComponent(component) {
-        var index = this.indexOf(tag);
         if (this[lowercaseFirstLetter(component.name)] != undefined)
             delete this[lowercaseFirstLetter(component.name)];
+        return this;
+    }
+    removeComponents(components) {
+        for (var key in components)
+            this.removeComponent(components[key]);
         return this;
     }
     hasComponent(component) {
@@ -24,7 +33,7 @@ class Entity {
     }
     hasComponents(components) {
         for (var key in components) {
-            if (!hasComponent(components[key]))
+            if (!this.hasComponent(components[key]))
                 return false;
         }
         return true;
@@ -34,20 +43,29 @@ class Entity {
         this.tags.push(tag);
         return this;
     }
+    addTags(tags) {
+        for (var key in tags)
+            this.addTag(tags[key]);
+        return this;
+    }
     removeTag(tag) {
         var index = this.tags.indexOf(tag);
         if (index != -1)
             this.tags[index].remove();
         return this;
     }
+    removeTags(tags) {
+        for (var key in tags)
+            this.removeTag(tags[key]);
+        return this;
+    }
     hasTag(tag) {
         return (this.tags.indexOf(tag) != -1);
     }
     hasTags(tags) {
-        for (var key in tags) {
-            if (!hasTag(tags[key]))
+        for (var key in tags)
+            if (!this.hasTag(tags[key]))
                 return false;
-        }
         return true;
     }
 }
@@ -76,11 +94,27 @@ class EntityManager {
         });
         return result;
     }
+    queryComponents(components) {
+        var result = [];
+        this.entities.forEach(function(entity) {
+            if (entity.hasComponents(components))
+                result.push(entity);
+        });
+        return result;
+    }
 
     queryTag(tag) {
         var result = [];
         this.entities.forEach(function(entity) {
             if (entity.hasTag(tag))
+                result.push(entity);
+        });
+        return result;
+    }
+    queryTags(tags) {
+        var result = [];
+        this.entities.forEach(function(entity) {
+            if (entity.hasTags(tags))
                 result.push(entity);
         });
         return result;
