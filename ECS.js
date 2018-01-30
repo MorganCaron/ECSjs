@@ -4,8 +4,8 @@ function lowercaseFirstLetter(string) {
 
 class Entity {
     constructor(name) {
-        this.entityId = nbEntities++;
-        this.entityName = name;
+        this.id = nbEntities++;
+        this.name = name;
         this.tags = [];
     }
 
